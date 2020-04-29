@@ -50,6 +50,7 @@
 @implementation LWWebViewController
 - (void)dealloc{
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.webView removeObserver:self forKeyPath:@"title"];
 }
 #pragma mark -- getter
 
@@ -88,10 +89,9 @@
         _webviewConfig.processPool = processPool;
         //进行偏好设置
         WKPreferences *preferences = [[WKPreferences alloc]init];
-        preferences.javaScriptCanOpenWindowsAutomatically = YES;
         preferences.minimumFontSize = 0; //最小字体大小 当将javaScriptEnabled属性设置为false时，可以看到明显的效果
         preferences.javaScriptEnabled = YES;//设置是否支持javaScript 默认是支持的
-        preferences.javaScriptCanOpenWindowsAutomatically = true;//(设置是否允许不经过用户交互由javaScript自动打开窗口) 很重要，如果没有设置这个则不会回调createWebViewWithConfiguration方法，也不会回应window.open()方法
+        preferences.javaScriptCanOpenWindowsAutomatically = YES;//(设置是否允许不经过用户交互由javaScript自动打开窗口) 很重要，如果没有设置这个则不会回调createWebViewWithConfiguration方法，也不会回应window.open()方法
         _webviewConfig.preferences = preferences;
         
         _webviewConfig.suppressesIncrementalRendering = NO; //设置是否将网页内容全部加载到内存后再渲染
@@ -212,8 +212,14 @@
 - (void)loadLocalBlueFile {
     NSString *bundleFile = [[NSBundle mainBundle] pathForResource:@"LocalFile" ofType:nil];
     NSString *htmlFile = [bundleFile stringByAppendingPathComponent:@"/index.html"];
-    NSData *htmlData = [NSData dataWithContentsOfFile:htmlFile];
-    [self.webView loadData:htmlData MIMEType:@"text/html" characterEncodingName:@"UTF-8" baseURL:[NSURL fileURLWithPath:bundleFile]];
+    
+    //加载本地带参url
+   NSString *path = [NSString stringWithFormat:@"file://%@",htmlFile];
+   NSURL *fileURL = [NSURL URLWithString:path];
+   [self.webView loadFileURL:fileURL allowingReadAccessToURL:fileURL];
+    
+//    NSData *htmlData = [NSData dataWithContentsOfFile:htmlFile];
+//    [self.webView loadData:htmlData MIMEType:@"text/html" characterEncodingName:@"UTF-8" baseURL:[NSURL fileURLWithPath:bundleFile]];
 }
 //加载本地文件
 - (void)loadLocalFile{
@@ -222,8 +228,14 @@
     if(path){
         if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0) {
             // iOS9. One year later things are OK.
-            NSURL *fileURL = [NSURL fileURLWithPath:path];
+            
+            //加载本地带参url
+            path = [NSString stringWithFormat:@"file://%@",path];
+            NSURL *fileURL = [NSURL URLWithString:path];
             [self.webView loadFileURL:fileURL allowingReadAccessToURL:fileURL];
+            
+//            NSURL *fileURL = [NSURL fileURLWithPath:path];
+//            [self.webView loadFileURL:fileURL allowingReadAccessToURL:fileURL];
         } else {
             // iOS8. Things can be workaround-ed
             //   Brave people can do just this
@@ -351,7 +363,7 @@
 }
 #pragma mark - WKUIDelegate
 //1.创建一个新的WebVeiw
-// 可以指定配置对象、导航动作对象、window特性
+// 可以指定配置对象、导航动作对象、window特性  window.open()
 - (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures{
     NSLog(@"%s", __FUNCTION__);
     NSLog(@"createWebViewWithConfiguration  request     %@",navigationAction.request);
@@ -365,7 +377,7 @@
     NSLog(@"%s", __FUNCTION__);
     [self.navigationController popViewControllerAnimated:YES];
 }
-//3.显示一个JS的Alert（与JS交互）
+//3.显示一个JS的Alert（与JS交互） alert()
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
     NSLog(@"%s", __FUNCTION__);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -375,13 +387,13 @@
     [self presentViewController:alert animated:YES completion:NULL];
     NSLog(@"%@", message);
 }
-//4.弹出一个输入框（与JS交互的）
+//4.弹出一个输入框（与JS交互的） confirm()
 - (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * __nullable result))completionHandler{
     NSLog(@"%s", __FUNCTION__);
     NSLog(@"%@", prompt);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"prompt" message:prompt preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField *_Nonnull textField) {
-        textField.textColor = [UIColor redColor];
+//        textField.textColor = [UIColor redColor];
         textField.placeholder = defaultText;
     }];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定"style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -390,7 +402,7 @@
     }]];
     [self presentViewController:alert animated:YES completion:NULL];
 }
-//5.显示一个确认框（JS的）
+//5.显示一个确认框（JS的） prompt()
 - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler{
     NSLog(@"%s", __FUNCTION__);
     

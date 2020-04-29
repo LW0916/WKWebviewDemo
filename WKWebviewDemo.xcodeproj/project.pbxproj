@@ -20,6 +20,8 @@
 		3D2C91A12149FAB1009EE61A /* LWWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C91A02149FAB1009EE61A /* LWWebViewController.m */; };
 		3D2C91A4214A4EED009EE61A /* LWScriptMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C91A3214A4EED009EE61A /* LWScriptMessageHandler.m */; };
 		3D2C91A7214A4FB7009EE61A /* LWURLSchemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C91A6214A4FB7009EE61A /* LWURLSchemeHandler.m */; };
+		650CD5FA23CEEC7E005D9203 /* 234.ppt in Resources */ = {isa = PBXBuildFile; fileRef = 650CD5F923CEEC7E005D9203 /* 234.ppt */; };
+		650CD5FC23CEEEE4005D9203 /* 20190926.xlsx in Resources */ = {isa = PBXBuildFile; fileRef = 650CD5FB23CEED71005D9203 /* 20190926.xlsx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		3D2C91A3214A4EED009EE61A /* LWScriptMessageHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LWScriptMessageHandler.m; sourceTree = "<group>"; };
 		3D2C91A5214A4FB7009EE61A /* LWURLSchemeHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LWURLSchemeHandler.h; sourceTree = "<group>"; };
 		3D2C91A6214A4FB7009EE61A /* LWURLSchemeHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LWURLSchemeHandler.m; sourceTree = "<group>"; };
+		650CD5F923CEEC7E005D9203 /* 234.ppt */ = {isa = PBXFileReference; lastKnownFileType = file; path = 234.ppt; sourceTree = "<group>"; };
+		650CD5FB23CEED71005D9203 /* 20190926.xlsx */ = {isa = PBXFileReference; lastKnownFileType = file; path = 20190926.xlsx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,8 @@
 		3D12C125207DE4E600D67C9D /* WKWebviewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				650CD5FB23CEED71005D9203 /* 20190926.xlsx */,
+				650CD5F923CEEC7E005D9203 /* 234.ppt */,
 				3D2C919D214929D1009EE61A /* index2.html */,
 				3D2C919B21491785009EE61A /* LocalFile */,
 				3D12C126207DE4E600D67C9D /* AppDelegate.h */,
@@ -259,7 +265,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				650CD5FA23CEEC7E005D9203 /* 234.ppt in Resources */,
 				3D2C919C21491785009EE61A /* LocalFile in Resources */,
+				650CD5FC23CEEEE4005D9203 /* 20190926.xlsx in Resources */,
 				3D12C133207DE4E800D67C9D /* LaunchScreen.storyboard in Resources */,
 				3D12C130207DE4E700D67C9D /* Assets.xcassets in Resources */,
 				3D12C12E207DE4E700D67C9D /* Main.storyboard in Resources */,
